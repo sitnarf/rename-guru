@@ -1,8 +1,8 @@
 import argparse
 from collections import namedtuple
 from glob import glob
-from process import process
 from distutils.dir_util import copy_tree
+from rename_guru.process import process
 
 parser = argparse.ArgumentParser(
     description='Copies the specified folder and replaces all occurrences of given string in camelCase, UPPER_CASE etc. formats.\n' +
