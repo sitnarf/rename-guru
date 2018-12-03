@@ -1,5 +1,6 @@
 import re
 import os
+from glob import glob
 import stringcase
 
 
@@ -11,13 +12,15 @@ def generate_variations(name):
         stringcase.capitalcase(name),
     ]
 
-def process(file_names, rename, to, parameters):
-    for file_name in file_names:
-        process_file(file_name, rename, to, parameters)
+def process(input_file, rename, to, parameters):
+    files = glob(input_file + "/*")
+    for file_name in files:
+        new_path = process_file(file_name, rename, to, parameters)
+        if os.path.isdir(new_path):
+            process(new_path, rename, to, parameters)
 
 def process_file(file_name, rename, to, parameters):
 
-    if not os.path.isdir(file_name):
         new_name = replace(file_name, rename, to, parameters._replace(verbose=False))
 
         if parameters.verbose:
@@ -26,17 +29,20 @@ def process_file(file_name, rename, to, parameters):
             if file_name != new_name:
                 print("\trename file \"%s\" -> \"%s\"" % (file_name, new_name,))
 
-        with open(file_name, "r") as f:
-            content = f.read()
+        if not os.path.isdir(file_name):
+            with open(file_name, "r") as f:
+                content = f.read()
 
-        new_content = replace(content, rename, to, parameters)
+            new_content = replace(content, rename, to, parameters)
 
-        if parameters.real:
-            with open(file_name, "w") as f:
-                f.write(new_content)
+            if parameters.real:
+                with open(file_name, "w") as f:
+                    f.write(new_content)
 
         if parameters.real:
             os.rename(file_name, new_name)
+
+        return new_name
 
 
 def replace(content, rename, to, parameters):

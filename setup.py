@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rename_guru",
-    version="0.0.5",
+    version="0.0.7",
     author="sitnarf",
     author_email="sitnarf@gmail.com",
     description="Tool for duplicating code while substituting specified string inside the folder, respecting camelCase, UPPER_CASE etc.",
